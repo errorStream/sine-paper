@@ -41,7 +41,7 @@
                     cell.setAttribute("posx",x);
                     cell.setAttribute("posy",y);
                     cell.addEventListener("click",function(){
-                        setCell(this.getAttribute("posx"),this.getAttribute("posy"));
+                        setCell(this);
                     });
                 }
                 matrixNodes.push(rowData);
@@ -73,19 +73,27 @@
         }
 
 
-        function setCell(x,y,type="none",data="none"){
-            var cell = getCell(x,y);
+//        function setCell(x,y,type="none",data="none"){
+//            var cell = getCell(x,y);
+//            var cellContent = getCellContent(x,y);
+//            alert("Cell type: " + cellContent.type + "\nposx: " + x + "\nposy: " + y );
+//        }
+
+        function setCell(cell){
+            var x = cell.getAttribute("posx");
+            var y = cell.getAttribute("posy");
             var cellContent = getCellContent(x,y);
-            alert("Cell type: " + cellContent.type + "\nposx: " + x + "\nposy: " + y );
+            console.debug(cellContent);
+
         }
 
-        function getCell(x,y){
-            var row = $("#matrix tr").eq(y);
-            var cell =  row.children("td").eq(x);
-            if(cell == 0)
-                alert("Index not found");
-            return cell;
-        }
+//        function getCell(x,y){
+//            var row = $("#matrix tr").eq(y);
+//            var cell =  row.children("td").eq(x);
+//            if(cell == 0)
+//                alert("Index not found");
+//            return cell;
+//        }
 
 
     </script>
