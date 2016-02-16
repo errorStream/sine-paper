@@ -1,0 +1,12 @@
+body{
+    background-color: #444444;
+}
+
+#matrix{
+    width:100%;
+    height:1000px;
+}
+
+#matrix td{
+    background-color: #555555;
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="jquery-1.12.0.min.js"></script>
+    <script type="text/javascript">
+
+        var matrixDef = {
+            width:10,
+            height:10
+        }
+
+        var matrixNodes = [];
+
+
+        try {
+            // Fix up for prefixing
+            window.AudioContext = window.AudioContext||window.webkitAudioContext;
+            context = new AudioContext();
+        }
+        catch(e) {
+            alert('Web Audio API is not supported in this browser');
+        }
+
+        function makeOsc(type,freq){ // types: "sine", “square”, “sawtooth”, “triangle”, or "custom"
+            var osc = context.createOscillator();
+            osc.frequency = freq;
+            osc.type = type;
+        }
+
+        function makeMatrix(width,height){
+            var table = $("#matrix")[0];
+            for(y=0;y<width;y++){
+                var row = table.insertRow(y);
+                var rowData = [];
+                for(x=0;x<height;x++){
+                    var cell = row.insertCell(x);
+                    rowData.push({type:"none",posx:x,posy:y});
+                    cell.setAttribute("posx",x);
+                    cell.setAttribute("posy",y);
+                    cell.addEventListener("click",function(){
+                        setCell(this.getAttribute("posx"),this.getAttribute("posy"));
+                    });
+                }
+                matrixNodes.push(rowData);
+            }
+        }
+
+
+
+        // place block
+//        var osc = context.createOscillator();
+//        osc.frequency.value = 440;
+
+        // connect
+//        osc.connect(context.destination);
+//        osc.start(0);
+//
+//        var gain = context.createGain();
+//        gain.gain.value = 100;
+//        gain.connect(osc.frequency);
+//
+//        var osc2 = context.createOscillator();
+//        osc2.frequency.value = 1;
+//        osc2.type = "square";
+//        osc2.connect(gain);
+//        osc2.start(0);
+
+        function getCellContent(x,y){
+            return matrixNodes[x][y];
+        }
+
+
+        function setCell(x,y,type="none",data="none"){
+            var cell = getCell(x,y);
+            var cellContent = getCellContent(x,y);
+            alert("Cell type: " + cellContent.type + "\nposx: " + x + "\nposy: " + y );
+        }
+
+        function getCell(x,y){
+            var row = $("#matrix tr").eq(y);
+            var cell =  row.children("td").eq(x);
+            if(cell == 0)
+                alert("Index not found");
+            return cell;
+        }
+
+
+    </script>
+</head>
+<body>
+    <div id="debugToolbar"><button onclick="setCell(3,4,'output',2)">makeOutput</button> </div>
+    <div>
+        <table id="matrix" >
+        </table>
+    </div>
+    <script type="text/javascript">makeMatrix(matrixDef.width,matrixDef.height);</script>
+</body>
+</html>
