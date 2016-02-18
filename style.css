@@ -19,8 +19,8 @@ body{
 
 
 .oscBlock{
-    width:100px;
-    margin: 0px;
+    width:200px;
+    margin: 0px auto;
     color:#cccccc;
 }
 
@@ -28,4 +28,7 @@ body{
     position: fixed;
     width: 1000px;
     height: 900px;
+	pointer-events:none;
+	z-index:20;
+	opacity:0.5;
 }
