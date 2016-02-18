@@ -26,7 +26,6 @@ body{
 
 #oscilloscope{
     position: fixed;
-    top: 200px;
-    width: 1400px;
-    height: 200px;
+    width: 1000px;
+    height: 900px;
 }

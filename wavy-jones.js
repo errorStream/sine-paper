@@ -5,7 +5,7 @@ var WavyJones = function (context, elem) {
   analyser.width = elem.offsetWidth;
   analyser.height = elem.offsetHeight;
   analyser.lineColor = 'yellow';
-  analyser.lineThickness = 5;
+  analyser.lineThickness = 1;
 
   var svgNamespace = "http://www.w3.org/2000/svg";
   var paper = document.createElementNS(svgNamespace, "svg");
@@ -20,11 +20,17 @@ var WavyJones = function (context, elem) {
   oscLine.setAttribute("fill","none");
   paper.appendChild(oscLine);
 
-  var noDataPoints = 10,
-    freqData = new Uint8Array(analyser.frequencyBinCount);
+  var noDataPoints = 10;
+
+    var zoom = 20;
+
+    var dataSize = zoom;
+    var allData = [];
+    var compress = zoom;
 
 
   var drawLine = function () {
+    var freqData = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteTimeDomainData(freqData);
 
     var graphPoints = [],
@@ -32,11 +38,20 @@ var WavyJones = function (context, elem) {
 
     graphPoints.push('M0, ' + (analyser.height/2));
 
-    for (var i = 0; i < freqData.length; i++) {
-      if (i % noDataPoints) {
-        var point = (freqData[i] / 128) * (analyser.height / 2);
-        graphPoints.push('L' + i + ', ' + point);
+      allData = allData.concat(freqData);
+      if(allData.length>dataSize){
+        allData = allData.slice(allData.length-dataSize);
       }
+
+    for(var j=0;j<allData.length;j++){
+        for (var i = 0; i < allData[j].length; i++) {
+            if (i % noDataPoints) {
+                var currFreqData = allData[j];
+                var ypos = ((currFreqData.length)*j + i)/compress;
+                var point = (currFreqData[i] / 128) * (analyser.height / 2);
+                graphPoints.push('L' + ypos + ', ' + point);
+              }
+        }
     }
 
     for (i = 0; i < graphPoints.length; i++) {
@@ -47,8 +62,9 @@ var WavyJones = function (context, elem) {
     oscLine.setAttribute("stroke-width", analyser.lineThickness);
 
     oscLine.setAttribute("d", graphStr);
+//      console.debug("\n\n\n" + graphStr);
 
-    setTimeout(drawLine, 100);
+    setTimeout(drawLine, 1);
   };
 
   drawLine();

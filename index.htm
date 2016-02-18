@@ -10,7 +10,8 @@
     <script type="text/javascript" src="wavy-jones.js"></script>
     <script type="text/javascript">
 
-        var waveBlock = "<div class='oscBlock' ><div class='block-title'>No Name</div><div class='block-freq'><div class='current-value'>0</div><div class='slider freq-slider'></div></div><div class='block-type'><div class='type-icon'><svg></svg></div></div><div class='block-amp'><div class='current-value'>0</div><div class='slider amp-slider'></div></div></div>";
+        //var waveBlock = "<div class='oscBlock' ><div class='block-title'>No Name</div><div class='block-freq'><div class='current-value'>0</div><div class='slider freq-slider'></div></div><div class='block-type'><div class='type-icon'><svg></svg></div></div><div class='block-amp'><div class='current-value'>0</div><div class='slider amp-slider'></div></div></div>";
+        var waveBlock = "<div class='oscBlock' ><div class='block-title'>No Name</div><div class='block-freq'><div class='current-value'>0</div><div class='slider freq-slider'></div></div><div class='block-type'><div class='type-icon'></div></div><div class='block-amp'><div class='current-value'>0</div><div class='slider amp-slider'></div></div></div>";
 
 
         var matrixDef = {
@@ -31,6 +32,13 @@
         catch(e) {
             alert('Web Audio API is not supported in this browser');
         }
+
+        var oscilloscope = new WavyJones(context, 'oscilloscope');
+        var gainNode = context.createGain();
+        gainNode.connect(oscilloscope);
+        oscilloscope.connect(context.destination);
+
+
 
         function makeOsc(type,freq){ // types: "sine", “square”, “sawtooth”, “triangle”, or "custom"
             var osc = context.createOscillator();
@@ -89,9 +97,10 @@
         function addOsc(freq){
             var osc = context.createOscillator();
             osc.frequency.value = freq;
-            osc.connect(context.destination);
+            osc.connect(gainNode);
             osc.start();
             oscTable.push(osc);
+            gainNode.gain.value = 1/(oscTable.length);
         }
 
 //        function getCellContent(x,y){
@@ -164,7 +173,7 @@
         <button onclick="setFreq(0,700)">Set to 700</button>
         <button onclick="startAll()">START ALL</button>
         <button onclick="stopAll()">STOP ALL</button>
-        <div id="slider"></div>
+        <div id="zoomSlider"></div>
         <div id="debugText">empty</div>
         <div>
             <table id='matrix' >
@@ -198,24 +207,26 @@
     </div>
     <script type="text/javascript">
         makeMatrix(matrixDef.width,matrixDef.height);
-        var sineWave = context.createOscillator();
-        sineWave.frequency.value = 500;
-        var sineWave2 = context.createOscillator();
-        sineWave2.frequency.value = 505;
-        var myOscilloscope = new WavyJones(context, 'oscilloscope');
+//        var sineWave = context.createOscillator();
+//        sineWave.frequency.value = 300;
+//        var sineWave2 = context.createOscillator();
+//        sineWave2.frequency.value = 303;
+//        var myOscilloscope = new WavyJones(context, 'oscilloscope');
+//
+//        var gain1 = context.createGain();
+//        gain1.gain.value = 0.5;
+//        var gain2 = context.createGain();
+//        gain2.gain.value = 0.5;
+//
+//        sineWave.connect(gain1);
+//        sineWave2.connect(gain1);
+//        gain1.connect(myOscilloscope);
+//        myOscilloscope.connect(context.destination);
+//
+//        sineWave.start(0);
+//        sineWave2.start(0);
 
-        var gain1 = context.createGain();
-        gain1.gain.value = 0.5;
-        var gain2 = context.createGain();
-        gain2.gain.value = 0.5;
 
-        sineWave.connect(gain1);
-        sineWave2.connect(gain1);
-        gain1.connect(myOscilloscope);
-        myOscilloscope.connect(context.destination);
-
-        sineWave.start(0);
-        sineWave2.start(0);
 
     </script>
 </body>
