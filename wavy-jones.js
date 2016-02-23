@@ -1,3 +1,6 @@
+/*
+Modified version of code from https://github.com/stuartmemo/wavy-jones
+*/
 var WavyJones = function (context, elem) {
   var analyser = context.createAnalyser();
   var elem = document.getElementById(elem);
