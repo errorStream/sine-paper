@@ -11,7 +11,7 @@
     <script type="text/javascript">
 
         //var waveBlock = "<div class='oscBlock' ><div class='block-title'>No Name</div><div class='block-freq'><div class='current-value'>0</div><div class='slider freq-slider'></div></div><div class='block-type'><div class='type-icon'><svg></svg></div></div><div class='block-amp'><div class='current-value'>0</div><div class='slider amp-slider'></div></div></div>";
-        var waveBlock = "<div class='oscBlock' ><div class='block-freq'><div class='current-value'>0</div><div class='slider freq-slider'></div></div><div class='block-type'><div class='type-icon'></div></div><div class='block-amp'><div class='current-value'>0</div><div class='slider amp-slider'></div></div></div>";
+        var waveBlock = "<div class='oscBlock' ><div class='block-freq'><input class='current-value' value=\"0\" ></input><div class='slider freq-slider'></div></div><div class='block-type'><div class='type-icon'></div></div><div class='block-amp'><input class='current-value' value=\"1\"></input><div class='slider amp-slider'></div></div></div>";
 
 
         var matrixDef = {
@@ -130,9 +130,9 @@
             $(cell).find(".freq-slider").slider({
                 slide: function(event,ui){
                     var target = $(event.target);
-                    var sibs = target.siblings("div")[0];
+                    var sibs = target.siblings("input")[0];
 					var newFreq = 2 * (ui.value*ui.value);
-                    sibs.textContent = Math.floor(newFreq);
+                    sibs.value = Math.floor(newFreq);
 					var par = target.parent().parent().parent(); // @TODO: make good
 					setFreq(par.attr("posx"),par.attr("posy"),newFreq);
                 },
@@ -141,9 +141,9 @@
             $(cell).find(".amp-slider").slider({
                 slide: function(event,ui){
                     var target = $(event.target);
-                    var sibs = target.siblings("div")[0];
+                    var sibs = target.siblings("input")[0];
 					newMul = ui.value/100.0;
-                    sibs.textContent = newMul;
+                    sibs.value = newMul;
 					var par = target.parent().parent().parent(); // @TODO: make good
 					setMul(par.attr("posx"),par.attr("posy"),newMul);
                 },
@@ -174,6 +174,11 @@
             for(i=0;i<oscTable.length;i++){
                 oscTable[i]["osc"].stop();
             }
+        }
+
+        function manualSet(){
+            var par = target.parent().parent().parent(); // @TODO: make good
+            setFreq(par.attr("posx"),par.attr("posy"),newFreq);
         }
 
         $(function(){
